@@ -19,15 +19,15 @@ mosquitto_sub "${MQTT_AUTH[@]}" -v \
   -t "${BASE}/set/raw" | while read -r topic payload; do
     case "$topic" in
       "${BASE}/set/max_charge_current")
-        min="$(bashio::config 'max_charge_current_min')"; max="$(bashio::config 'max_charge_current_max')"; step="$(bashio::config 'max_charge_current_step')"
+        min="$(option 'max_charge_current_min')"; max="$(option 'max_charge_current_max')"; step="$(option 'max_charge_current_step')"
         valid_number "$payload" "$min" "$max" "$step" && send_command "MNCHGC$(printf '%03d' "$payload")" || echo "Rejected invalid maximum charge current: $payload" >&2
         ;;
       "${BASE}/set/utility_charge_current")
-        min="$(bashio::config 'utility_charge_current_min')"; max="$(bashio::config 'utility_charge_current_max')"; step="$(bashio::config 'utility_charge_current_step')"
+        min="$(option 'utility_charge_current_min')"; max="$(option 'utility_charge_current_max')"; step="$(option 'utility_charge_current_step')"
         valid_number "$payload" "$min" "$max" "$step" && send_command "MUCHGC$(printf '%03d' "$payload")" || echo "Rejected invalid utility charge current: $payload" >&2
         ;;
       "${BASE}/set/raw")
-        if bashio::config.true 'allow_raw_commands' && [[ "$payload" =~ ^[A-Za-z0-9.]{2,16}$ ]]; then
+        if option_true 'allow_raw_commands' && [[ "$payload" =~ ^[A-Za-z0-9.]{2,16}$ ]]; then
             send_command "$payload"
         else
             echo "Rejected raw command (disabled or invalid)" >&2
