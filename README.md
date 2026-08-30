@@ -1,5 +1,7 @@
 # Voltronic Inverter Home Assistant add-on
 
+<a href="https://buymeacoffee.com/pedroshed" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" width="217" height="60"></a>
+
 A native Home Assistant add-on based on [catalinbordan/docker-voltronic-homeassistant](https://github.com/catalinbordan/docker-voltronic-homeassistant).
 
 It resolves the inverter from a stable hardware/device ID instead of relying on a changing `/dev/ttyUSB0` or `/dev/hidraw0` number. MQTT discovery creates monitoring sensors, charging-current controls, and dropdown controls for output and charger source priority.
