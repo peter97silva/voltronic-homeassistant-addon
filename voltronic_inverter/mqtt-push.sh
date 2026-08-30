@@ -12,6 +12,12 @@ if (( POLL_STATUS != 0 )) || ! jq -e . >/dev/null 2>&1 <<<"$DATA"; then
     exit 1
 fi
 
+DETECTED_PROTOCOL="$(jq -r '.Protocol // "unknown"' <<<"$DATA")"
+if [[ ! -f /data/runtime/detected_protocol ]] || [[ "$(cat /data/runtime/detected_protocol)" != "$DETECTED_PROTOCOL" ]]; then
+    echo "Detected inverter protocol: $DETECTED_PROTOCOL"
+    printf '%s\n' "$DETECTED_PROTOCOL" > /data/runtime/detected_protocol
+fi
+
 while IFS=$'\t' read -r key value; do
     publish -t "${BASE}/state/${key}" -m "$value"
 done < <(jq -r 'to_entries[] | [.key, (.value|tostring)] | @tsv' <<<"$DATA")
