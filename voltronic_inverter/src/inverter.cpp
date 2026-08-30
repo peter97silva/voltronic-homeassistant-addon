@@ -79,18 +79,27 @@ bool cInverter::query(const char *cmd) {
 
   // Speed settings (in this case, 2400 8N1)
   struct termios settings;
-  tcgetattr(fd, &settings);
+  if (tcgetattr(fd, &settings) != 0) {
+    lprintf("DEBUG:  Unable to read serial settings (errno=%d %s)", errno, strerror(errno));
+    close(fd);
+    return false;
+  }
 
-  cfsetospeed(&settings, baud);      // baud rate
-  settings.c_cflag &= ~PARENB;       // no parity
-  settings.c_cflag &= ~CSTOPB;       // 1 stop bit
-  settings.c_cflag &= ~CSIZE;
-  settings.c_cflag |= CS8 | CLOCAL;  // 8 bits
-  // settings.c_lflag = ICANON;         // canonical mode
-  settings.c_oflag &= ~OPOST;        // raw output
+  // Match pyserial's proven 2400 8N1 configuration used by
+  // peter97silva/docker-voltronic-mqtt.  Configure both directions and do
+  // not inherit canonical processing, echo, or flow control from the host.
+  cfmakeraw(&settings);
+  cfsetispeed(&settings, baud);
+  cfsetospeed(&settings, baud);
+  settings.c_cflag &= ~(PARENB | CSTOPB | CSIZE | CRTSCTS);
+  settings.c_cflag |= CS8 | CLOCAL | CREAD;
 
-  tcsetattr(fd, TCSANOW, &settings); // apply the settings
-  tcflush(fd, TCOFLUSH);
+  if (tcsetattr(fd, TCSANOW, &settings) != 0) {
+    lprintf("DEBUG:  Unable to apply serial settings (errno=%d %s)", errno, strerror(errno));
+    close(fd);
+    return false;
+  }
+  tcflush(fd, TCIOFLUSH);
 
   // ---------------------------------------------------------------
 
@@ -286,9 +295,9 @@ uint16_t cInverter::cal_crc_half(uint8_t *pin, uint8_t len) {
   }
   bCRCLow = crc;
   bCRCHign= (uint8_t)(crc>>8);
-  if(bCRCLow==0x28||bCRCLow==0x0d||bCRCLow==0x0a)
+  if(bCRCLow==0x28||bCRCLow==0x0d||bCRCLow==0x0a||bCRCLow==0x00)
     bCRCLow++;
-  if(bCRCHign==0x28||bCRCHign==0x0d||bCRCHign==0x0a)
+  if(bCRCHign==0x28||bCRCHign==0x0d||bCRCHign==0x0a||bCRCHign==0x00)
     bCRCHign++;
   crc = ((uint16_t)bCRCHign)<<8;
   crc += bCRCLow;
@@ -299,3 +308,4 @@ bool cInverter::CheckCRC(unsigned char *data, int len) {
   uint16_t crc = cal_crc_half(data, len-3);
   return data[len-3]==(crc>>8) && data[len-2]==(crc&0xff);
 }
+
