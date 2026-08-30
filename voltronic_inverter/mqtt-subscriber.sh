@@ -7,10 +7,21 @@ valid_number() {
 }
 
 send_command() {
-    local command="$1" reply
-    reply="$(timeout 15 inverter_poller -r "$command" 2>&1 || true)"
-    echo "Command $command: $reply"
-    publish -t "${BASE}/command_result" -m "$command: $reply"
+    local command="$1" reply status=0 result
+    reply="$(timeout 20 inverter_poller -r "$command" -d 2>&1)" || status=$?
+
+    if (( status == 0 )) && grep -Eq '^Reply:[[:space:]]+ACK[[:space:]]*$' <<<"$reply"; then
+        result="$command: ACK"
+        echo "Command accepted: $result"
+        publish -t "${BASE}/command_result" -m "$result"
+        return 0
+    fi
+
+    result="$command: FAILED (exit status $status)"
+    echo "Command failed: $result" >&2
+    echo "$reply" >&2
+    publish -t "${BASE}/command_result" -m "$result"
+    return 1
 }
 
 mosquitto_sub "${MQTT_AUTH[@]}" -v \
