@@ -22,6 +22,7 @@ number() {
 }
 
 sensor Inverter_mode "Inverter mode"
+sensor Protocol "Detected protocol"
 sensor AC_grid_voltage "AC grid voltage" V voltage
 sensor AC_grid_frequency "AC grid frequency" Hz frequency
 sensor AC_out_voltage "AC output voltage" V voltage
