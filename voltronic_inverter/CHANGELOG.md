@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.3
+
+- Include `<fcntl.h>` for the POSIX `open()` declaration and `O_RDWR` flag.
+- Remove non-standard arithmetic on a `void *` during inverter reads.
+
 ## 0.1.2
 
 - Fix GCC 14 build errors caused by passing pointers-to-arrays to `sscanf` `%s` conversions.
