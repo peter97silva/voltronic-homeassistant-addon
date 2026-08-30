@@ -2,6 +2,8 @@
 #define ___INVERTER_H
 
 #include <atomic>
+#include <cstdint>
+#include <string>
 #include <thread>
 #include <mutex>
 

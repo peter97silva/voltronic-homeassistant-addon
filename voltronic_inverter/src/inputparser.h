@@ -3,6 +3,7 @@
 #ifndef INPUTPARSER_H
 #define INPUTPARSER_H
 
+#include <string>
 #include <vector>
 
 class InputParser {
