@@ -21,6 +21,13 @@ number() {
       | publish -r -t "${MQTT_TOPIC}/number/${MQTT_SERIAL}/${key}/config" -l
 }
 
+select_entity() {
+    local key="$1" name="$2" state_key="$3" options="$4" value_template="$5"
+    jq -nc --arg name "$name" --arg uid "${MQTT_SERIAL}_${key}" --arg state "${BASE}/state/${state_key}" --arg cmd "${BASE}/set/${key}" --arg available "${BASE}/availability" --argjson options "$options" --arg value_template "$value_template" --argjson device "$DEVICE" \
+      '{name:$name,unique_id:$uid,state_topic:$state,command_topic:$cmd,availability_topic:$available,options:$options,value_template:$value_template,device:$device}' \
+      | publish -r -t "${MQTT_TOPIC}/select/${MQTT_SERIAL}/${key}/config" -l
+}
+
 sensor Inverter_mode "Inverter mode"
 sensor Protocol "Detected protocol"
 sensor AC_grid_voltage "AC grid voltage" V voltage
@@ -46,6 +53,14 @@ number max_charge_current "Maximum charging current" Max_charge_current \
   "$(option 'max_charge_current_min')" "$(option 'max_charge_current_max')" "$(option 'max_charge_current_step')"
 number utility_charge_current "Maximum utility charging current" Max_grid_charge_current \
   "$(option 'utility_charge_current_min')" "$(option 'utility_charge_current_max')" "$(option 'utility_charge_current_step')"
+
+select_entity output_source_priority "Output source priority" Out_source_priority \
+  '["Utility-Solar-Battery","Solar-Utility-Battery","Solar-Battery-Utility"]' \
+  "{% set modes = {'0':'Utility-Solar-Battery','1':'Solar-Utility-Battery','2':'Solar-Battery-Utility'} %}{{ modes.get(value, value) }}"
+
+select_entity charger_source_priority "Charger source priority" Charger_source_priority \
+  '["Utility first","Solar first","Solar and utility","Solar only"]' \
+  "{% set modes = {'0':'Utility first','1':'Solar first','2':'Solar and utility','3':'Solar only'} %}{{ modes.get(value, value) }}"
 
 publish -r -t "${BASE}/availability" -m online
 
