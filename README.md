@@ -2,7 +2,7 @@
 
 A native Home Assistant add-on based on [catalinbordan/docker-voltronic-homeassistant](https://github.com/catalinbordan/docker-voltronic-homeassistant).
 
-It resolves the inverter from a stable hardware/device ID instead of relying on a changing `/dev/ttyUSB0` or `/dev/hidraw0` number. MQTT discovery creates monitoring sensors and controls for total and utility charging current.
+It resolves the inverter from a stable hardware/device ID instead of relying on a changing `/dev/ttyUSB0` or `/dev/hidraw0` number. MQTT discovery creates monitoring sensors, charging-current controls, and dropdown controls for output and charger source priority.
 
 ## Install
 
@@ -16,3 +16,4 @@ See the add-on Documentation tab for configuration, command, and safety details.
 ## Credits and license
 
 The inverter poller is derived from the GPL-3.0 upstream project and remains under GPL-3.0. See `LICENSE`.
+
