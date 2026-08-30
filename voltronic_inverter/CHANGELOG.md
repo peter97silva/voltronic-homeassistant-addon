@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.9
+
+- Fix false PI30MAX `QPIGS` timeouts when the binary response CRC contains a literal `0x00` before the terminating carriage return.
+- Accept the unescaped zero response-CRC behavior observed on MAX firmware while retaining escaped CRC bytes for transmitted commands.
+- Retry incomplete required queries once and exit promptly with a useful error if the retry fails.
+- Add MQTT discovery for the inverter-reported PV charging power value.
+
 ## 0.1.8
 
 - Request Home Assistant's dedicated `uart` device mapping so `/dev/ttyUSB*`, `/dev/ttyACM*`, and other serial devices can be opened without relying on unprotected full-access mode.
