@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.6
+
+- Increase the inverter polling timeout to accommodate all protocol queries.
+- Separate poller debug logging from its JSON response and report the underlying serial, timeout, or CRC failure in add-on logs.
+- Configure the serial adapter in full raw 2400 8N1 mode, including the input baud rate, and flush stale input before each query.
+- Match the CRC escaping behavior used by the previously working `peter97silva/docker-voltronic-mqtt` implementation.
+
 ## 0.1.5
 
 - Normalize all runtime shell scripts to Unix LF line endings during the image build, preventing `$'\\r': command not found` failures.
