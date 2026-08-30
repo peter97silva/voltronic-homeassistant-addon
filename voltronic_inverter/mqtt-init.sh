@@ -30,6 +30,7 @@ sensor AC_out_frequency "AC output frequency" Hz frequency
 sensor PV_in_voltage "PV input voltage" V voltage
 sensor PV_in_current "PV input current" A current
 sensor PV_in_watts "PV input power" W power
+sensor PV_charging_power "PV charging power" W power
 sensor Load_pct "Load" "%"
 sensor Load_watt "Load power" W power
 sensor Battery_capacity "Battery capacity" "%" battery
