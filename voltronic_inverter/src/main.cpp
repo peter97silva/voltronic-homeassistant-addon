@@ -185,9 +185,13 @@ float batt_redischarge_voltage;
     }
 
 
-    if (runOnce)
+    if (runOnce) {
         ups->poll();
-    else
+        if (!(ups_qmod_changed && ups_qpiri_changed && ups_qpigs_changed)) {
+            fprintf(stderr, "Required inverter queries did not complete after retry\n");
+            return 2;
+        }
+    } else
         ups->runMultiThread();
 
     while (true) {
