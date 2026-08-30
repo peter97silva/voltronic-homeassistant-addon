@@ -41,8 +41,9 @@ sensor Out_source_priority "Output source priority"
 sensor Warnings "Warnings"
 
 number max_charge_current "Maximum charging current" Max_charge_current \
-  "$(bashio::config 'max_charge_current_min')" "$(bashio::config 'max_charge_current_max')" "$(bashio::config 'max_charge_current_step')"
+  "$(option 'max_charge_current_min')" "$(option 'max_charge_current_max')" "$(option 'max_charge_current_step')"
 number utility_charge_current "Maximum utility charging current" Max_grid_charge_current \
-  "$(bashio::config 'utility_charge_current_min')" "$(bashio::config 'utility_charge_current_max')" "$(bashio::config 'utility_charge_current_step')"
+  "$(option 'utility_charge_current_min')" "$(option 'utility_charge_current_max')" "$(option 'utility_charge_current_step')"
 
 publish -r -t "${BASE}/availability" -m online
+
