@@ -1,5 +1,5 @@
 name: Voltronic Inverter MQTT
-version: "0.1.0"
+version: "0.1.1"
 slug: voltronic_inverter
 description: Monitor and control PI30-compatible Voltronic/Axpert inverters by stable device ID
 url: https://github.com/peter97silva/voltronic-homeassistant-addon
