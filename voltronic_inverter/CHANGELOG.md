@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.4
+
+- Fix MQTT discovery startup by reading add-on options directly from `/data/options.json` in helper processes where Bashio functions are unavailable.
+- Fix charge-current command validation and raw-command option handling for the same helper-process environment.
+
 ## 0.1.3
 
 - Include `<fcntl.h>` for the POSIX `open()` declaration and `O_RDWR` flag.
@@ -18,3 +23,4 @@
 ## 0.1.0
 
 - Initial Home Assistant add-on release.
+
