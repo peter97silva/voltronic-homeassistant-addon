@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.7
+
+- Automatically distinguish PI30MAX from PI30 using the extended `QPIRI` response shape, since PI30MAX may identify itself as PI30 through `QPI`.
+- Log the detected protocol and publish it as a Home Assistant MQTT sensor.
+- Flush native debug output immediately so serial writes, reads, CRC failures, and per-command timeouts remain visible when the outer poll timeout terminates the process.
+
 ## 0.1.6
 
 - Increase the inverter polling timeout to accommodate all protocol queries.
