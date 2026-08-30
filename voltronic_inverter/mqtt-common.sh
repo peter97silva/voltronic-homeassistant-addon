@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 MQTT_CONFIG=/data/runtime/mqtt.json
+OPTIONS_CONFIG=/data/options.json
 MQTT_SERVER="$(jq -r '.server' "$MQTT_CONFIG")"
 MQTT_PORT="$(jq -r '.port' "$MQTT_CONFIG")"
 MQTT_USERNAME="$(jq -r '.username' "$MQTT_CONFIG")"
@@ -15,4 +16,9 @@ if [[ -n "$MQTT_USERNAME" ]]; then
 fi
 
 publish() { mosquitto_pub "${MQTT_AUTH[@]}" "$@"; }
+
+# mqtt helper scripts run as ordinary Bash processes, so Bashio shell
+# functions are not available here. Read add-on options directly instead.
+option() { jq -er --arg key "$1" '.[$key]' "$OPTIONS_CONFIG"; }
+option_true() { [[ "$(option "$1")" == "true" ]]; }
 
