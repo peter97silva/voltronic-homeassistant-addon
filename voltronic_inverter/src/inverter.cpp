@@ -153,7 +153,7 @@ bool cInverter::query(const char *cmd) {
   char *endbuf = 0;
   do {
     // According to protocol manual, it appears no query should ever exceed 120 byte size in response
-    n = read(fd, (void*)buf+i, 120 - i);
+    n = read(fd, buf + i, 120 - i);
     if (n < 0)
     {
       if (time(NULL) - started > 5)     // Wait 5 secs before timeout
