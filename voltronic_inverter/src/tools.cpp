@@ -34,6 +34,7 @@ void lprintf(const char *format, ...) {
         va_start(ap, format);
         vprintf(fmt, ap);
         va_end(ap);
+        fflush(stdout);
 
         //to the logfile:
         static FILE *log;
@@ -72,3 +73,4 @@ int print_help() {
 
     return 1;
 }
+
