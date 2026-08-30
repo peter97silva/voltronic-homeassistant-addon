@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.8
+
+- Request Home Assistant's dedicated `uart` device mapping so `/dev/ttyUSB*`, `/dev/ttyACM*`, and other serial devices can be opened without relying on unprotected full-access mode.
+- Keep udev access for resolving stable `/dev/serial/by-id` identifiers to the mapped serial device.
+
 ## 0.1.7
 
 - Automatically distinguish PI30MAX from PI30 using the extended `QPIRI` response shape, since PI30MAX may identify itself as PI30 through `QPI`.
