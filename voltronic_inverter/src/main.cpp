@@ -20,6 +20,7 @@
 #include <string.h>
 
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -214,6 +215,16 @@ float batt_redischarge_voltage;
 
             if (reply1 && reply2 && warnings) {
 
+                // PI30MAX normally still reports PI30 for QPI. Its extended
+                // QPIRI response is therefore the more reliable discriminator.
+                std::istringstream qpiri_stream(*reply2);
+                std::string qpiri_field;
+                size_t qpiri_field_count = 0;
+                while (qpiri_stream >> qpiri_field) ++qpiri_field_count;
+                const char *detected_protocol = qpiri_field_count > 23 ? "PI30MAX" : "PI30";
+                fprintf(stderr, "Detected inverter protocol: %s (%zu QPIRI fields)\n",
+                        detected_protocol, qpiri_field_count);
+
                 // Parse and display values, QPIGS, * means contained in output, ^ is not included in output
                 sscanf(reply1->c_str(), "%f %f %f %f %d %d %d %d %f %d %d %d %f %f %f %d %8s %d %d %d %3s",
                        &voltage_grid,          // * Grid voltage
@@ -288,6 +299,7 @@ float batt_redischarge_voltage;
                 // Print as JSON (output is expected to be parsed by another tool...)
                 printf("{\n");
 
+                printf("  \"Protocol\":\"%s\",\n", detected_protocol);
                 printf("  \"Inverter_mode\":%d,\n", mode);
                 printf("  \"AC_grid_voltage\":%.1f,\n", voltage_grid);    // QPIGS
                 printf("  \"AC_grid_frequency\":%.1f,\n", freq_grid);     // QPIGS
@@ -351,3 +363,4 @@ float batt_redischarge_voltage;
     }
     return 0;
 }
+
