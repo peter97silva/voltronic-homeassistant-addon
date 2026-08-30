@@ -1,5 +1,5 @@
 name: Voltronic Inverter MQTT
-version: "0.1.3"
+version: "0.1.4"
 slug: voltronic_inverter
 description: Monitor and control PI30-compatible Voltronic/Axpert inverters by stable device ID
 url: https://github.com/peter97silva/voltronic-homeassistant-addon
@@ -55,3 +55,4 @@ schema:
   utility_charge_current_max: int(1,999)
   utility_charge_current_step: int(1,999)
   allow_raw_commands: bool
+
