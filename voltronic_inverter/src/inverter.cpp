@@ -178,11 +178,13 @@ bool cInverter::query(const char *cmd) {
     }
     i += n;
     buf[i] = '\0';  // terminate what we have so far with a null string
-    lprintf("DEBUG:  %d bytes read, %d total bytes:  %02x %02x %02x %02x %02x %02x %02x %02x",
-            n, i, buf[i-8], buf[i-7], buf[i-6], buf[i-5], buf[i-4], buf[i-3], buf[i-2], buf[i-1]);
+    lprintf("DEBUG:  %d bytes read, %d total bytes", n, i);
 
     startbuf = (char *)&buf[0];
-    endbuf = strchr(startbuf, '\r');
+    // CRC bytes are binary and some PI30MAX firmware returns a literal 0x00
+    // immediately before CR. strchr() stops at that NUL, so search the bytes
+    // already read instead of treating the response as a C string.
+    endbuf = (char *)memchr(buf, '\r', i);
 
     //lprintf("DEBUG:  %s Current buffer: %s", cmd, startbuf);
   } while (endbuf == NULL);     // Still haven't found end <cr> char as long as pointer is null
@@ -212,6 +214,7 @@ bool cInverter::query(const char *cmd) {
 
 void cInverter::poll() {
   extern bool runOnce;
+  int run_once_attempts = 0;
 
   while (true) {
     // Reading mode
@@ -255,7 +258,13 @@ void cInverter::poll() {
         ups_qpiws_changed = true;
       }
     }
-    if (quit_thread || runOnce) return;
+    if (quit_thread) return;
+    if (runOnce) {
+      if (ups_qmod_changed && ups_qpigs_changed && ups_qpiri_changed) return;
+      if (++run_once_attempts >= 2) return;
+      usleep(250000);
+      continue;
+    }
     sleep(5);
   }
 }
@@ -306,6 +315,12 @@ uint16_t cInverter::cal_crc_half(uint8_t *pin, uint8_t len) {
 
 bool cInverter::CheckCRC(unsigned char *data, int len) {
   uint16_t crc = cal_crc_half(data, len-3);
-  return data[len-3]==(crc>>8) && data[len-2]==(crc&0xff);
+  uint8_t expected_high = crc >> 8;
+  uint8_t expected_low = crc & 0xff;
+  // Some MAX firmware does not escape a calculated 0x00 response CRC byte
+  // to 0x01 even though it accepts escaped command CRC bytes.
+  bool high_ok = data[len-3] == expected_high || (data[len-3] == 0x00 && expected_high == 0x01);
+  bool low_ok = data[len-2] == expected_low || (data[len-2] == 0x00 && expected_low == 0x01);
+  return high_ok && low_ok;
 }
 
