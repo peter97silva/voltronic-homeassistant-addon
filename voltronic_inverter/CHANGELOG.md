@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5
+
+- Normalize all runtime shell scripts to Unix LF line endings during the image build, preventing `$'\\r': command not found` failures.
+
 ## 0.1.4
 
 - Fix MQTT discovery startup by reading add-on options directly from `/data/options.json` in helper processes where Bashio functions are unavailable.
