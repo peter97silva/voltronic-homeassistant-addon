@@ -117,11 +117,11 @@ float pv_input_watts;
 // float load_watthour = 0;
 float scc_voltage;
 int batt_discharge_current;
-char device_status[8];
+char device_status[9];
 int battery_voltage_offset_for_fans_on;
 int eeprom_version;
 int pv_charging_power;
-char device_status2[3];
+char device_status2[4];
 
 // Reply2
 float grid_voltage_rating;
@@ -214,7 +214,7 @@ float batt_redischarge_voltage;
             if (reply1 && reply2 && warnings) {
 
                 // Parse and display values, QPIGS, * means contained in output, ^ is not included in output
-                sscanf(reply1->c_str(), "%f %f %f %f %d %d %d %d %f %d %d %d %f %f %f %d %s %d %d %d %s",
+                sscanf(reply1->c_str(), "%f %f %f %f %d %d %d %d %f %d %d %d %f %f %f %d %8s %d %d %d %3s",
                        &voltage_grid,          // * Grid voltage
                        &freq_grid,             // * Grid frequency
                        &voltage_out,           // * AC output voltage
@@ -231,11 +231,11 @@ float batt_redischarge_voltage;
                        &pv_input_voltage,      // * PV Input voltage 1
                        &scc_voltage,           // * Battery voltage from SCC (V)
                        &batt_discharge_current,// * Battery discharge current
-                       &device_status,        //
+                       device_status,         // Eight QPIGS status flags
                        &battery_voltage_offset_for_fans_on,
                        &eeprom_version,
                        &pv_charging_power,
-                       &device_status2);
+                       device_status2);
 
                 char parallel_max_num; //QPIRI
                 sscanf(reply2->c_str(), "%f %f %f %f %f %d %d %f %f %f %f %f %d %d %d %d %d %d %c %d %d %d %f",
