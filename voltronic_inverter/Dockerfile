@@ -20,6 +20,8 @@ COPY mqtt-init.sh /usr/local/bin/mqtt-init
 COPY mqtt-push.sh /usr/local/bin/mqtt-push
 COPY mqtt-subscriber.sh /usr/local/bin/mqtt-subscriber
 COPY mqtt-common.sh /usr/local/bin/mqtt-common
-RUN chmod 0755 /run.sh /usr/local/bin/mqtt-*
+RUN sed -i 's/\r$//' /run.sh /usr/local/bin/mqtt-* \
+    && chmod 0755 /run.sh /usr/local/bin/mqtt-*
 
 CMD ["/run.sh"]
+
