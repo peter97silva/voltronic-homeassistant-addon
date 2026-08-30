@@ -6,6 +6,7 @@
 - Separate poller debug logging from its JSON response and report the underlying serial, timeout, or CRC failure in add-on logs.
 - Configure the serial adapter in full raw 2400 8N1 mode, including the input baud rate, and flush stale input before each query.
 - Match the CRC escaping behavior used by the previously working `peter97silva/docker-voltronic-mqtt` implementation.
+- Require an explicit inverter `ACK` before reporting a charge-current command as successful; log and publish `NAK`, timeout, and serial failures.
 
 ## 0.1.5
 
