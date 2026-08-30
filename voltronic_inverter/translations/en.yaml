@@ -1,0 +1,41 @@
+configuration:
+  device_id:
+    name: Device ID
+    description: Stable /dev/serial/by-id path, its filename, or a udev ID_SERIAL/ID_PATH/VID:PID value.
+  device_path:
+    name: Device path fallback
+    description: Explicit path such as /dev/hidraw0 or /dev/ttyUSB0, used only when Device ID is empty.
+  device_name:
+    name: Device name
+  manufacturer:
+    name: Manufacturer
+  model:
+    name: Model
+  serial:
+    name: Unique inverter ID
+    description: Stable unique ID used to group MQTT entities into one Home Assistant device.
+  mqtt_topic:
+    name: MQTT discovery prefix
+  poll_interval:
+    name: Poll interval
+    description: Seconds between inverter polls.
+  amperage_factor:
+    name: Amperage correction factor
+  watt_factor:
+    name: Wattage correction factor
+  max_charge_current_min:
+    name: Total charge current minimum
+  max_charge_current_max:
+    name: Total charge current maximum
+  max_charge_current_step:
+    name: Total charge current step
+  utility_charge_current_min:
+    name: Utility charge current minimum
+  utility_charge_current_max:
+    name: Utility charge current maximum
+  utility_charge_current_step:
+    name: Utility charge current step
+  allow_raw_commands:
+    name: Allow raw PI30 commands
+    description: Advanced and potentially unsafe; disabled by default.
+
