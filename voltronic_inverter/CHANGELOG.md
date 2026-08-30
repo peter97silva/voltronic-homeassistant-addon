@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0
+
+- Add a Home Assistant MQTT Select for output source priority using `POP00`, `POP01`, and `POP02`.
+- Add a Home Assistant MQTT Select for charger source priority using `PCP00` through `PCP03`.
+- Derive both select states from the current values reported by `QPIRI` and retain explicit inverter ACK verification.
+- Rename the Home Assistant add-on repository display name to Pedroshed Add-ons.
+
 ## 0.1.9
 
 - Fix false PI30MAX `QPIGS` timeouts when the binary response CRC contains a literal `0x00` before the terminating carriage return.
